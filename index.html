@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Diet Planner</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="script.js" defer></script>
+    <script src="pdf-export.js" defer></script>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <h1>🍎 AI Diet Planner</h1>
+            <p>Personalized Indian Diet Plans powered by AI</p>
+        </header>
+
+        <!-- Auth Section -->
+        <div id="auth-section">
+            <div class="form-card">
+                <h2 id="auth-title">Login</h2>
+                <form id="auth-form">
+                    <input type="text" id="username" placeholder="Username" required>
+                    <input type="password" id="password" placeholder="Password" required>
+                    <input type="email" id="email" placeholder="Email (for register)" style="display:none;">
+                    <button type="submit" id="auth-btn">Login</button>
+                    <p id="toggle-auth">Don't have account? <a href="#" id="toggle-link">Register</a></p>
+                </form>
+            </div>
+        </div>
+
+        <!-- Main App (hidden initially) -->
+        <div id="main-app" style="display:none;">
+            <!-- Profile & Plans -->
+            <div class="profile-section">
+                <div class="user-info">
+                    <span id="user-info">Welcome!</span>
+                    <button id="logout-btn">Logout</button>
+                </div>
+                <div class="plans-grid">
+                    <button id="new-plan-btn" class="plan-card new-plan">+ New Diet Plan</button>
+                </div>
+            </div>
+
+            <!-- Diet Form -->
+            <div id="diet-form-section" class="form-card" style="display:none;">
+                <h2>Generate Your Diet Plan</h2>
+                <form id="diet-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Age:</label>
+                            <input type="number" id="age" min="12" max="100" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Gender:</label>
+                            <select id="gender" required>
+                                <option value="">Select</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Height (cm):</label>
+                            <input type="number" id="height" step="0.1" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Weight (kg):</label>
+                            <input type="number" id="weight" step="0.1" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Activity Level:</label>
+                            <select id="activity_level" required>
+                                <option value="">Select</option>
+                                <option value="low">Low (sedentary)</option>
+                                <option value="medium">Medium</option>
+                                <option value="high">High (active)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Goal:</label>
+                            <select id="goal" required>
+                                <option value="">Select</option>
+                                <option value="weight_loss">Weight Loss</option>
+                                <option value="maintenance">Maintenance</option>
+                                <option value="weight_gain">Weight Gain</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Food Preference:</label>
+                        <select id="food_preference" required>
+                            <option value="">Select</option>
+                            <option value="veg">Vegetarian</option>
+                            <option value="non_veg">Non-Vegetarian</option>
+                        </select>
+                    </div>
+                    <button type="submit" id="generate-btn">
+                        <span id="generate-text">Generate Plan</span>
+                        <div id="loading-spinner" class="spinner" style="display:none;"></div>
+                    </button>
+                </form>
+            </div>
+
+            <!-- Results -->
+            <div id="results-section" style="display:none;">
+                <h2>Your Personalized Diet Plan</h2>
+                <div class="metrics">
+                    <div class="metric-card">
+                        <h3>BMI</h3>
+                        <span id="bmi">-</span>
+                    </div>
+                    <div class="metric-card">
+                        <h3>Daily Calories</h3>
+                        <span id="daily-calories">-</span>
+                    </div>
+                    <div class="metric-card">
+                        <h3>Water Intake</h3>
+                        <span id="water-intake">-</span>
+                    </div>
+                </div>
+                <div class="meal-plan">
+                    <div class="meal-card">
+                        <h3>🍳 Breakfast</h3>
+                        <p id="breakfast">-</p>
+                    </div>
+                    <div class="meal-card">
+                        <h3>🍛 Lunch</h3>
+                        <p id="lunch">-</p>
+                    </div>
+                    <div class="meal-card">
+                        <h3>🍽️ Dinner</h3>
+                        <p id="dinner">-</p>
+                    </div>
+                    <div class="meal-card">
+                        <h3>🥜 Snacks</h3>
+                        <p id="snacks">-</p>
+                    </div>
+                </div>
+                <div class="action-buttons">
+                    <button id="save-plan">💾 Save Plan</button>
+                    <button id="download-pdf">📥 Download PDF</button>
+                    <button id="new-plan-again">New Plan</button>
+                </div>
+            </div>
+
+            <!-- Chatbot -->
+            <div class="chat-section">
+                <h3>💬 Quick Diet Tips</h3>
+                <div class="chat-container">
+                    <div id="chat-messages"></div>
+                    <form id="chat-form">
+                        <input type="text" id="chat-input" placeholder="Ask about diet tips...">
+                        <button type="submit">Send</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
